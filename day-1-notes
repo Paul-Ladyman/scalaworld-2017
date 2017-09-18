@@ -1,0 +1,72 @@
+Data, and when not to use it
+--------------------------
+
+- In Scala data types tend to be represented as one sealed trait with multiple case classes containing some data. E.g. Either, Option etc.
+
+- We construct data at some point, do something with it an ultimately deconstruct it. Data types used to do support this could be called intermediate data types.
+
+- Conversion issues can occur when trying to mix different data types together.
+
+- Passing functions into another function that define what to do next is called the continuation pattern.
+
+Real-World Dotty
+----------------
+
+- next generation Scala compiler
+
+Compiler steps
+- Tokenize source files
+- Parse AST (abstract syntax tree)
+-- Can report syntax errors at this point
+- Typecheck
+- Map syntax tree to something compatible with the JVM
+
+- New things
+-- Union types A | B
+-- new enum (looks a bit like match/case)
+
+- Current state
+-- 0.X releases
+
+Fast, Immutable Interval Sets
+------------------
+
+- Spire library for Non overlapping intervals (https://github.com/non/spire)
+- (0, +inf), (-inf, 0), (-inf, +inf) etc.
+- Support mathematical operations on these sets using Scala type system
+-- union between sets (|)
+-- intersection (&)
+-- negation
+
+Simplicity in Composition
+----------------
+
+- composition - able to apply same approach at a macro or micro level of a problem, or; break a large problem into smaller ones
+- associativity - evaluate sub-expressions in any order we want - can be used with composition to deal with the small problems in any order
+- Category theory is a formal mathematical description of composition. We can use it to describe how our programs compose together
+
+Cool Things
+-----------
+
+- People keep talking about Scala IO {...} ??
+- Implicitly command - find out what implicit is being using in a particular scope!
+
+@ implicitly[String]
+cmd0.sc:1: could not find implicit value for parameter e: String
+val res0 = implicitly[String]
+                     ^
+Compilation Failed
+@ implicit val y: String = "right"
+y: String = "right"
+@ implicitly[String]
+res1: String = "right"
+@ implicit val x: String = "wrong"
+x: String = "wrong"
+@ implicitly[String]
+cmd3.sc:1: ambiguous implicit values:
+ both value y in object cmd0 of type => String
+ and value x in object cmd2 of type => String
+ match expected type String
+val res3 = implicitly[String]
+                     ^
+Compilation Failed
