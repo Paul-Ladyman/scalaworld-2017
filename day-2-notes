@@ -1,0 +1,75 @@
+Unison Keynote
+-----------
+- language for building distributed systems
+- writing distributed microservices these days is a lot of work
+  -- Scala code
+  -- HTTP code
+  -- JSON parsing code
+  -- involves arbitrary tasks like connecting AWS ASGs to ELBs
+- Unison wants to program any pool of distributed resources like its a single computer
+  -- its functional
+  -- it emphasises distributed systems
+  -- it has a scala-based runtime
+- language can run arbitrary code on a remote `Node`
+- In order to send the code to the remote Node, Nodes can send the AST (abstract syntax tree) for that code to each other and then use compilation by partial evaluation to interpret the AST in near real time speeds (1x - 2x slower).
+- Interpreters are normally slow due to:
+  -- instruction decoding - potentially involving looping through nested instructions
+  -- unpredictable machine code sequence - hard for the CPU to handle
+  -- missing optimisations available to statically-compiled code (JVM code has lots of optimisations to make things quick)
+- Partial evaluation compilation addresses these issues by producing an intermediate compiled form after an initial interpret stage that allows the JVM and JIT (just in time compiler) to perform standard optimisations
+
+A Pragmatic Introduction to Category Theory
+-------------------------------------
+github.com/DanielaSfregola/tutorial-cat
+
+- Category theory is not necessary for writing Scala or functional code but gives a deeper understanding of code
+- It becomes more important for writing libraries
+- any programming approach involves composition and abstraction
+  -- OOP composition of objects, abstraction over the what the objects do
+  -- FP composition of functions, abstraction over mathematical laws
+- category theory describes how things compose
+- A category is a group of objects with some relationship in a particular direction e.g. A -> B.
+  -- In programming the objects are usually Types and the arrows are usually functions, but in mathematics its more general
+- Category theory describes several rules for the objects:
+  -- Composition
+  A -> B -> C means its possible to do A -> C
+  -- Identity Law
+  A -> A
+  -- Associativity - order doesn't matter
+  (A -> B) -> C = A -> (B -> C)
+
+- Practical example
+String - size > Int - >2 > Bool
+
+- A Monoid is a category with 1 object
+trait Monoid[A] {
+  def identity: A
+  def compose(x: A, y: A): A
+}
+-- it generates elements of a set.
+
+- A Functor is a "category in a box" or a "a value lifted into a context"
+-- e.g. Option, Future, List, Either, Try...
+-- Functors have content (what's inside the box) and context (the nature of the box)
+-- Functors obey the category laws mentioned above
+-- Functors describe how to change the contents of the box (its type)
+-- but we cannot mutate the box itself
+
+- An Applicative is something that combines the contents of two boxes or puts an object in a box
+-- it still obeys the category laws (plus some others)
+-- every Applicative is also a Functor as it can map the contents of the boxes
+
+- A monad is the result of fusing two boxes together
+-- E.g. Option[Option[Int]]
+-- they define a way to flatten the nested boxes into a single box
+-- they are also Functors since they define a way to map the contents of the box to another type or object.
+
+A Tale of Two Monix Streams
+---------------------
+- Monix is inspired by rxJava and the RX pattern (reactive)
+- it combines reactive programming with monads
+- FP Design
+-- Freeze algorithms in data types
+----- Implementations of tasks like mapping, filtering will often use match statements that look at those data types
+-- think state machines
+-- by lazy (use functions instead of vals)

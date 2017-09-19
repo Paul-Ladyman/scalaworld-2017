@@ -48,7 +48,7 @@ Simplicity in Composition
 Cool Things
 -----------
 
-- People keep talking about Scala IO {...} ??
+- People keep talking about Scala IO {...} ?? From Cats library?
 - Implicitly command - find out what implicit is being using in a particular scope!
 
 @ implicitly[String]
